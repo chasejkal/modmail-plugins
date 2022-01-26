@@ -18,7 +18,7 @@ class UtilityExamples(commands.Cog):
         member = member or ctx.author
         role = get(member.guild.roles, name="Trusted")
         e = discord.Embed(description="**Given artist role.**", color=0X00FF00)
-        await ctx.send(embed=em)
+        await ctx.send(embed=e)
         await member.add_roles(role) 
 
 
