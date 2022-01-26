@@ -12,7 +12,7 @@ class UtilityExamples(commands.Cog):
     async def get(self, ctx, member: discord.Member = None):
         """Gets a user's group"""
         member = member or ctx.author
-        role = get(member.server.roles, name="Media")
+        role = get(member.server.roles, name="Trusted")
         await bot.add_roles(member, role) 
 
 
