@@ -1,7 +1,10 @@
 import discord
 from discord.ext import commands
 from discord.utils import get
+
+from core import checks
 from core.models import PermissionLevel
+
 class UtilityExamples(commands.Cog):
     """Provides basic utility commands"""
     def __init__(self, bot):
