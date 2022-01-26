@@ -13,7 +13,7 @@ class UtilityExamples(commands.Cog):
         """Gets a user's group"""
         member = member or ctx.author
         role = get(member.server.roles, name="Trusted")
-        await bot.add_roles(member, role) 
+        await member.add_roles(role) 
 
 
 def setup(bot):
