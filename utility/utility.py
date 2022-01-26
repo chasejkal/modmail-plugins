@@ -8,7 +8,7 @@ class UtilityExamples(commands.Cog):
         self.bot = bot
 
 
-    @group.command()
+    @commands.command()
     async def get(self, ctx, member: discord.Member = None):
         """Gets a user's group"""
         member = member or ctx.author
