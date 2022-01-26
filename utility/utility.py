@@ -13,10 +13,10 @@ class UtilityExamples(commands.Cog):
 
     @commands.command()
     @checks.has_permissions(PermissionLevel.MODERATOR)
-    async def get(self, ctx, member: discord.Member = None):
+    async def art(self, ctx, member: discord.Member = None):
         """Gets a user's group"""
         member = member or ctx.author
-        role = get(member.guild.roles, name="Trusted")
+        role = get(member.guild.roles, name="artists")
         e = discord.Embed(description="**Given artist role.**", color=0X00FF00)
         await ctx.send(embed=e)
         await member.add_roles(role) 
