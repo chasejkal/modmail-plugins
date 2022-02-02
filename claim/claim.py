@@ -25,7 +25,10 @@ class ClaimThread(commands.Cog):
         if thread is None:
             await self.db.insert_one({'thread_id': str(ctx.thread.channel.id), 'claimers': [str(ctx.author.id)]})
             await ctx.send('Claimed')
-            await ctx.channel.set_permissions(ctx.guild.default_role, view_channel=False)
+            helper = discord.utils.get(ctx.guild.roles, name="Helper")
+            mod = discord.utils.get(ctx.guild.roles, name="yo can i get mod?")
+            await ctx.channel.set_permissions(helper, view_channel=False)
+            await ctx.channel.set_permissions(mod, view_channel=False)
         else:
             await ctx.send('Thread is already claimed')
 
