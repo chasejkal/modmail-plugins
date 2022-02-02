@@ -40,15 +40,6 @@ class ClaimThread(commands.Cog):
             await ctx.channel.set_permissions(member, view_channel=True)
             await ctx.send(f'Added {member.mention} to the channel.')
 
-    @checks.has_permissions(PermissionLevel.SUPPORTER)
-    @checks.thread_only()
-    @commands.command()
-    async def removeclaim(self, ctx, *, member: discord.Member):
-        """Removes a user from the thread claimers"""
-        if thread and str(ctx.author.id) in thread['claimers']:
-            await ctx.channel.set_permissions(member, view_channel=True)
-            await ctx.send(f'Removed {member.mention}')
-
 
 
 
