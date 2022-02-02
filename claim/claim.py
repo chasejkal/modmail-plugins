@@ -38,7 +38,7 @@ class ClaimThread(commands.Cog):
         thread = await self.db.find_one({'thread_id': str(ctx.thread.channel.id)})
         if thread and str(ctx.author.id) in thread['claimers']:
             await ctx.channel.set_permissions(member, view_channel=True)
-            await ctx.send('Added to claimers')
+            await ctx.send(f'Added {member.mention} to the channel.')
 
     @checks.has_permissions(PermissionLevel.SUPPORTER)
     @checks.thread_only()
@@ -47,7 +47,7 @@ class ClaimThread(commands.Cog):
         """Removes a user from the thread claimers"""
         if thread and str(ctx.author.id) in thread['claimers']:
             await ctx.channel.set_permissions(member, view_channel=True)
-            await ctx.send(f'Removed {member}')
+            await ctx.send(f'Removed {member.mention}')
 
 
 
