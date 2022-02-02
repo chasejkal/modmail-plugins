@@ -23,7 +23,7 @@ class ClaimThread(commands.Cog):
         thread = await self.db.find_one({'thread_id': str(ctx.thread.channel.id)})
         if thread is None:
             await self.db.insert_one({'thread_id': str(ctx.thread.channel.id), 'claimers': [str(ctx.author.id)]})
-            await ctx.send('Claimed')
+            await ctx.send(f'Thread claimed by {ctx.message.author}, use `;adduser (userid)` if you require assistance from other staff members.')
             helper = discord.utils.get(ctx.guild.roles, name="Helper")
             mod = discord.utils.get(ctx.guild.roles, name="yo can i get mod?")
             await ctx.channel.set_permissions(helper, view_channel=False)
