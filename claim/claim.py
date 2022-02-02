@@ -40,7 +40,7 @@ class ClaimThread(commands.Cog):
         """Adds another user to the thread claimers"""
         thread = await self.db.find_one({'thread_id': str(ctx.thread.channel.id)})
         if thread and str(ctx.author.id) in thread['claimers']:
-            await self.db.find_one_and_update({'thread_id': str(ctx.thread.channel.id)}, {'$addToSet': {'claimers': str(member.id)}})
+            await ctx.channel.set_permissions(member, view_channel=True)
             await ctx.send('Added to claimers')
 
     @checks.has_permissions(PermissionLevel.SUPPORTER)
