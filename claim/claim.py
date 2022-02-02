@@ -29,6 +29,7 @@ class ClaimThread(commands.Cog):
             mod = discord.utils.get(ctx.guild.roles, name="yo can i get mod?")
             await ctx.channel.set_permissions(helper, view_channel=False)
             await ctx.channel.set_permissions(mod, view_channel=False)
+            await ctx.channel.set_permissions(message.author, read_messages=True)
         else:
             await ctx.send('Thread is already claimed')
 
