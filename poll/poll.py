@@ -17,7 +17,7 @@ class TopSupporters(commands.Cog):
     @checks.has_permissions(PermissionLevel.ADMINISTRATOR)
     @commands.command()
     async def qp(self, ctx):
-        await ctx.message.add_reaction()
+        await ctx.message.add_reaction('<:upvote:#938670835751845898#>')
 
 
 def setup(bot):
