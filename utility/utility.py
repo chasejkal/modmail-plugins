@@ -34,6 +34,15 @@ class UtilityExamples(commands.Cog):
             member = thread.recipient
         await ctx.send(f"{member.id}")
 
+    @commands.command()
+    @checks.has_permissions(PermissionLevel.MODERATOR)
+    async def userid(self, ctx):
+        thread = ctx.thread
+        if thread == None:
+            await ctx.send("You have to use in a thread.")
+        else:
+            member = thread.recipient
+        await ctx.send(f">verify {member.id}")
 
 def setup(bot):
     bot.add_cog(UtilityExamples(bot))
