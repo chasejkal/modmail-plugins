@@ -13,13 +13,26 @@ class UtilityExamples(commands.Cog):
 
     @commands.command()
     @checks.has_permissions(PermissionLevel.MODERATOR)
-    async def art(self, ctx, member: discord.Member = None):
+    async def art(self, ctx):
         """Gets a user's group"""
-        member = member or ctx.author
+        thread = ctx.thread
+        if thread == None:
+            member = ctx.author
+        else:
+            member = thread.recipient
         role = get(member.guild.roles, name="artists")
         e = discord.Embed(description="**Given artist role.**", color=0X00FF00)
         await ctx.send(embed=e)
         await member.add_roles(role) 
+    @commands.command()
+    @checks.has_permissions(PermissionLevel.MODERATOR)
+    async def userid(self, ctx):
+        thread = ctx.thread
+        if thread == None:
+            member = ctx.author
+        else:
+            member = thread.recipient
+        await ctx.send(f"{member.id}")
 
 
 def setup(bot):
