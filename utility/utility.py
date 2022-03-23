@@ -29,7 +29,7 @@ class UtilityExamples(commands.Cog):
     async def userid(self, ctx):
         thread = ctx.thread
         if thread == None:
-            member = ctx.author
+            await ctx.send("You have to use in a thread.")
         else:
             member = thread.recipient
         await ctx.send(f"{member.id}")
