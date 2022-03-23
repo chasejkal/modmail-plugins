@@ -17,7 +17,7 @@ class UtilityExamples(commands.Cog):
         """Gets a user's group"""
         thread = ctx.thread
         if thread == None:
-            member = ctx.author
+            await ctx.send("You cant give yourself the role LMAO L + ratio + ur bad + become a better mod")
         else:
             member = thread.recipient
         role = get(member.guild.roles, name="artists")
