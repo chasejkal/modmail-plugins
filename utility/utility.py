@@ -26,7 +26,7 @@ class UtilityExamples(commands.Cog):
         await member.add_roles(role) 
     @commands.command()
     @checks.has_permissions(PermissionLevel.MODERATOR)
-    async def qv(self, ctx):
+    async def userid(self, ctx):
         thread = ctx.thread
         if thread == None:
             await ctx.send("You have to use in a thread.")
@@ -36,7 +36,7 @@ class UtilityExamples(commands.Cog):
 
     @commands.command()
     @checks.has_permissions(PermissionLevel.MODERATOR)
-    async def userid(self, ctx):
+    async def qv(self, ctx):
         thread = ctx.thread
         if thread == None:
             await ctx.send("You have to use in a thread.")
