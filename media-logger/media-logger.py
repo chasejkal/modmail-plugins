@@ -26,17 +26,18 @@ class MediaLogger(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, m):
-        if m.author.bot or await self.is_ignored(m.channel): return
+        if m.author.bot or await self.is_ignored(m.channel):
+            return
 
         em = discord.Embed(
             description=f'[Jump to Message]({m.jump_url})',
             color=self.bot.main_color,
             timestamp=datetime.utcnow()
         )
-        em.set_author(name=m.author.name, icon_url=m.author.avatar_url)
+        em.set_author(name=m.author.name, icon_url=m.author.display_avatar.url)
         em.set_footer(text=f'U: {m.author.id} | C: {m.channel.id} | M: {m.id}')
         for a in m.attachments:
-            if a.filename.endswith('.png') or a.filename.endswith('.jpeg') or a.filename.endswith('.gif') or a.filename.endswith('.jpg') or a.filename.endswith('.mp4') or a.filename.endswith('.mov') or a.filename.endswith('.mp3') or a.filename.endswith('.webm'):
+            if a.filename.lower().endswith(('.png', '.jpeg', '.jpg', '.gif')):
                 file = await a.to_file()
                 channel = await self.log_channel()
                 if channel:
@@ -46,7 +47,11 @@ class MediaLogger(commands.Cog):
     @commands.command()
     async def setmedialogchannel(self, ctx, channel: discord.TextChannel):
         """Sets the media log channel"""
-        await self.db.find_one_and_update({'_id': 'config'}, {'$set': {'log_channel': str(channel.id), 'ignored_channels': []}}, upsert=True)
+        await self.db.find_one_and_update(
+            {'_id': 'config'},
+            {'$set': {'log_channel': str(channel.id), 'ignored_channels': []}},
+            upsert=True
+        )
         await ctx.send('Success')
 
     @checks.has_permissions(PermissionLevel.MODERATOR)
