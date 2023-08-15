@@ -10,39 +10,44 @@ class UtilityExamples(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-
     @commands.command()
     @checks.has_permissions(PermissionLevel.MODERATOR)
     async def art(self, ctx):
-        """Gets a user's group"""
+        """Give a user the 'artists' role"""
         thread = ctx.thread
-        if thread == None:
-            await ctx.send("You cant give yourself the role LMAO L + ratio + ur bad + become a better mod")
+        if thread is None:
+            await ctx.send("This command must be used in a thread.")
         else:
             member = thread.recipient
-        role = get(member.guild.roles, name="artists")
-        e = discord.Embed(description="**Given artist role.**", color=0X00FF00)
-        await ctx.send(embed=e)
-        await member.add_roles(role) 
+            role = get(member.guild.roles, name="artists")
+            if role is None:
+                await ctx.send("The 'artists' role does not exist on this server.")
+            else:
+                await member.add_roles(role)
+                e = discord.Embed(description="**Given artist role.**", color=0X00FF00)
+                await ctx.send(embed=e)
+
     @commands.command()
     @checks.has_permissions(PermissionLevel.MODERATOR)
     async def userid(self, ctx):
+        """Get the user ID of the thread recipient"""
         thread = ctx.thread
-        if thread == None:
-            await ctx.send("You have to use in a thread.")
+        if thread is None:
+            await ctx.send("This command must be used in a thread.")
         else:
             member = thread.recipient
-        await ctx.send(f"{member.id}")
+            await ctx.send(f"User ID: {member.id}")
 
     @commands.command()
     @checks.has_permissions(PermissionLevel.MODERATOR)
     async def qv(self, ctx):
+        """Generate a quick verify command for the user"""
         thread = ctx.thread
-        if thread == None:
-            await ctx.send("You have to use in a thread.")
+        if thread is None:
+            await ctx.send("This command must be used in a thread.")
         else:
             member = thread.recipient
-        await ctx.send(f">verify {member.id}")
+            await ctx.send(f">verify {member.id}")
 
 def setup(bot):
     bot.add_cog(UtilityExamples(bot))
