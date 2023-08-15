@@ -16,8 +16,6 @@ class ClaimThread(commands.Cog):
         self.bot.get_command('areply').add_check(check_reply)
         self.bot.get_command('fareply').add_check(check_reply)
         self.bot.get_command('freply').add_check(check_reply)
-        self.bot.get_command('close').add_check(check_reply)
-
 
     @checks.has_permissions(PermissionLevel.SUPPORTER)
     @checks.thread_only()
@@ -60,7 +58,7 @@ class ClaimThread(commands.Cog):
             await self.db.find_one_and_update({'thread_id': str(ctx.thread.channel.id)}, {'$set': {'claimers': [str(member.id)]}})
             await ctx.send('Added to claimers')
 
-    @checks.has_permissions(PermissionLevel.ADMINSTRATOR)
+    @checks.has_permissions(PermissionLevel.MODERATOR)
     @checks.thread_only()
     @commands.command()
     async def overrideaddclaim(self, ctx, *, member: discord.Member):
@@ -70,7 +68,7 @@ class ClaimThread(commands.Cog):
             await self.db.find_one_and_update({'thread_id': str(ctx.thread.channel.id)}, {'$addToSet': {'claimers': str(member.id)}})
             await ctx.send('Added to claimers')
 
-    @checks.has_permissions(PermissionLevel.ADMINSTRATOR)
+    @checks.has_permissions(PermissionLevel.MODERATOR)
     @checks.thread_only()
     @commands.command()
     async def overridereply(self, ctx, *, msg: str=""):
