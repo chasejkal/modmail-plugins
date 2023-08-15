@@ -12,11 +12,11 @@ class ClaimThread(commands.Cog):
         self.bot = bot
         self.db = self.bot.plugin_db.get_partition(self)
         check_reply.fail_msg = 'This thread has been claimed by another user.'
+        self.bot.get_command('close').add_check(check_reply)
         self.bot.get_command('reply').add_check(check_reply)
         self.bot.get_command('areply').add_check(check_reply)
         self.bot.get_command('fareply').add_check(check_reply)
         self.bot.get_command('freply').add_check(check_reply)
-        self.bot.get_command('close').add_check(check_reply)
 
     @checks.has_permissions(PermissionLevel.SUPPORTER)
     @checks.thread_only()
@@ -25,51 +25,51 @@ class ClaimThread(commands.Cog):
         thread = await self.db.find_one({'thread_id': str(ctx.thread.channel.id)})
         if thread is None:
             await self.db.insert_one({'thread_id': str(ctx.thread.channel.id), 'claimers': [str(ctx.author.id)]})
-            await ctx.send(f'{ctx.author.mention} has claimed this thread.')
+            await ctx.send('Claimed')
         else:
             await ctx.send('Thread is already claimed')
 
     @checks.has_permissions(PermissionLevel.SUPPORTER)
     @checks.thread_only()
     @commands.command()
-    async def addmod(self, ctx, *, member: discord.Member):
+    async def addclaim(self, ctx, *, member: discord.Member):
         """Adds another user to the thread claimers"""
         thread = await self.db.find_one({'thread_id': str(ctx.thread.channel.id)})
         if thread and str(ctx.author.id) in thread['claimers']:
             await self.db.find_one_and_update({'thread_id': str(ctx.thread.channel.id)}, {'$addToSet': {'claimers': str(member.id)}})
-            await ctx.send('Added to thread.')
+            await ctx.send('Added to claimers')
 
     @checks.has_permissions(PermissionLevel.SUPPORTER)
     @checks.thread_only()
     @commands.command()
-    async def removemod(self, ctx, *, member: discord.Member):
+    async def removeclaim(self, ctx, *, member: discord.Member):
         """Removes a user from the thread claimers"""
         thread = await self.db.find_one({'thread_id': str(ctx.thread.channel.id)})
         if thread and str(ctx.author.id) in thread['claimers']:
             await self.db.find_one_and_update({'thread_id': str(ctx.thread.channel.id)}, {'$pull': {'claimers': str(member.id)}})
-            await ctx.send('Removed from thread.')
+            await ctx.send('Removed from claimers')
 
     @checks.has_permissions(PermissionLevel.SUPPORTER)
     @checks.thread_only()
     @commands.command()
-    async def transfer(self, ctx, *, member: discord.Member):
+    async def transferclaim(self, ctx, *, member: discord.Member):
         """Removes all users from claimers and gives another member all control over thread"""
         thread = await self.db.find_one({'thread_id': str(ctx.thread.channel.id)})
         if thread and str(ctx.author.id) in thread['claimers']:
             await self.db.find_one_and_update({'thread_id': str(ctx.thread.channel.id)}, {'$set': {'claimers': [str(member.id)]}})
             await ctx.send('Added to claimers')
 
-    @checks.has_permissions(PermissionLevel.ADMINISTRATOR)
+    @checks.has_permissions(PermissionLevel.MODERATOR)
     @checks.thread_only()
     @commands.command()
-    async def overrideaddmod(self, ctx, *, member: discord.Member):
+    async def overrideaddclaim(self, ctx, *, member: discord.Member):
         """Allow mods to bypass claim thread check in add"""
         thread = await self.db.find_one({'thread_id': str(ctx.thread.channel.id)})
         if thread:
             await self.db.find_one_and_update({'thread_id': str(ctx.thread.channel.id)}, {'$addToSet': {'claimers': str(member.id)}})
             await ctx.send('Added to claimers')
 
-    @checks.has_permissions(PermissionLevel.ADMINISTRATOR)
+    @checks.has_permissions(PermissionLevel.MODERATOR)
     @checks.thread_only()
     @commands.command()
     async def overridereply(self, ctx, *, msg: str=""):
