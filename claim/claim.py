@@ -17,6 +17,13 @@ class ClaimThread(commands.Cog):
         self.bot.get_command('fareply').add_check(check_reply)
         self.bot.get_command('freply').add_check(check_reply)
 
+    async def claim_response(self, ctx, claimed):
+        if claimed:
+            embed = discord.Embed(title="Claim Failed", description="This thread has already been claimed.", color=0xFF0000)
+        else:
+            embed = discord.Embed(title="Claimed", description="You have successfully claimed this thread.", color=0x00FF00)
+        await ctx.send(embed=embed)
+
     @checks.has_permissions(PermissionLevel.SUPPORTER)
     @checks.thread_only()
     @commands.command()
@@ -24,10 +31,9 @@ class ClaimThread(commands.Cog):
         thread = await self.db.find_one({'thread_id': str(ctx.thread.channel.id)})
         if thread is None:
             await self.db.insert_one({'thread_id': str(ctx.thread.channel.id), 'claimers': [str(ctx.author.id)]})
-            await ctx.send('Claimed')
+            await self.claim_response(ctx, False)
         else:
-            embed=discord.Embed(title="hazel test yes", url="https://google.com/", description="This is an embed that hazel test yes", color=0xFF5733)
-            await ctx.send(embed=embed)
+            await self.claim_response(ctx, True)
 
     @checks.has_permissions(PermissionLevel.SUPPORTER)
     @checks.thread_only()
@@ -37,27 +43,8 @@ class ClaimThread(commands.Cog):
         thread = await self.db.find_one({'thread_id': str(ctx.thread.channel.id)})
         if thread and str(ctx.author.id) in thread['claimers']:
             await self.db.find_one_and_update({'thread_id': str(ctx.thread.channel.id)}, {'$addToSet': {'claimers': str(member.id)}})
-            await ctx.send('Added to claimers')
-
-    @checks.has_permissions(PermissionLevel.SUPPORTER)
-    @checks.thread_only()
-    @commands.command()
-    async def removeclaim(self, ctx, *, member: discord.Member):
-        """Removes a user from the thread claimers"""
-        thread = await self.db.find_one({'thread_id': str(ctx.thread.channel.id)})
-        if thread and str(ctx.author.id) in thread['claimers']:
-            await self.db.find_one_and_update({'thread_id': str(ctx.thread.channel.id)}, {'$pull': {'claimers': str(member.id)}})
-            await ctx.send('Removed from claimers')
-
-    @checks.has_permissions(PermissionLevel.SUPPORTER)
-    @checks.thread_only()
-    @commands.command()
-    async def transferclaim(self, ctx, *, member: discord.Member):
-        """Removes all users from claimers and gives another member all control over thread"""
-        thread = await self.db.find_one({'thread_id': str(ctx.thread.channel.id)})
-        if thread and str(ctx.author.id) in thread['claimers']:
-            await self.db.find_one_and_update({'thread_id': str(ctx.thread.channel.id)}, {'$set': {'claimers': [str(member.id)]}})
-            await ctx.send('Added to claimers')
+            embed = discord.Embed(title="Claimer Added", description=f"{member.mention} has been added to claimers.", color=0x00FF00)
+            await ctx.send(embed=embed)
 
     @checks.has_permissions(PermissionLevel.MODERATOR)
     @checks.thread_only()
@@ -67,7 +54,8 @@ class ClaimThread(commands.Cog):
         thread = await self.db.find_one({'thread_id': str(ctx.thread.channel.id)})
         if thread:
             await self.db.find_one_and_update({'thread_id': str(ctx.thread.channel.id)}, {'$addToSet': {'claimers': str(member.id)}})
-            await ctx.send('Added to claimers')
+            embed = discord.Embed(title="Claimer Added", description=f"{member.mention} has been added to claimers.", color=0x00FF00)
+            await ctx.send(embed=embed)
 
     @checks.has_permissions(PermissionLevel.MODERATOR)
     @checks.thread_only()
