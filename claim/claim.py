@@ -26,7 +26,7 @@ class ClaimThread(commands.Cog):
             await self.db.insert_one({'thread_id': str(ctx.thread.channel.id), 'claimers': [str(ctx.author.id)]})
             await ctx.send('Claimed')
         else:
-            embed = discord.Embed(title="Ticket Status", description="This ticket is already claimed!", color=FF0000)
+            embed = discord.Embed(title="Ticket Status", description="This ticket is already claimed!", color=red)
             await ctx.send(embed=embed)
 
     @checks.has_permissions(PermissionLevel.SUPPORTER)
