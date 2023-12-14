@@ -1,24 +1,30 @@
-from collections import defaultdict
-from datetime import datetime
-
 import discord
 from discord.ext import commands
+import openai
 
-from core import checks
-from core.models import PermissionLevel
-from core.time import UserFriendlyTime
+# Set up your OpenAI API key
+openai.api_key = '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'
 
+# Set up your Discord bot
+bot = commands.Bot(command_prefix='!')
 
-class TopSupporters(commands.Cog):
-    """Sets up top supporters command in Modmail discord"""
-    def __init__(self, bot):
-        self.bot = bot
+@bot.event
+async def on_ready():
+    print(f'We have logged in as {bot.user}')
 
-    @checks.has_permissions(PermissionLevel.ADMINISTRATOR)
-    @commands.command()
-    async def qp(self, ctx):
-        await ctx.message.add_reaction('<:upvote:#938670835751845898#>')
+@bot.command()
+async def chat(ctx, *, user_input):
+    # Use OpenAI to generate a response
+    response = openai.Completion.create(
+        model="text-davinci-003",
+        prompt=user_input,
+        temperature=0.7,
+        max_tokens=150,
+        n=1,
+    )
+    
+    # Send the response back to Discord
+    await ctx.send(response.choices[0].text)
 
-
-def setup(bot):
-    bot.add_cog(TopSupporters(bot))
+# Run your bot
+bot.run('your_discord_bot_token')
