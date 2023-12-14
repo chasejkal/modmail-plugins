@@ -72,7 +72,7 @@ class ClaimThread(commands.Cog):
 def check_reply(ctx):
     return ctx.author.bot or str(ctx.author.id) in ctx.thread.claimers if hasattr(ctx, 'thread') else False
 
-check_reply.fail_msg = 'This thread has been claimed by another user.'
+check_reply.fail_msg = 'This thread has been claimed by another user. Balls'
 
 
 async def setup(bot):
