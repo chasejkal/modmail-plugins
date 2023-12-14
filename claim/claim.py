@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from core import checks
 from core.checks import PermissionLevel
+import random
 
 class ClaimThread(commands.Cog):
     """Allows supporters to claim thread by sending claim in the thread channel"""
@@ -15,7 +16,8 @@ class ClaimThread(commands.Cog):
     @commands.command()
     async def claim(self, ctx):
             await ctx.send('Claimed')
-            new_name = f"{ctx.author.name}-{ctx.channel.name}"
+            number = random.randit(1111,9999)
+            new_name = f"{number}-{ctx.author.name}-{ctx.channel.name}"
             B = discord.utils.get(ctx.guild.channels, name="Claimed Tickets")
             await ctx.channel.edit(category=B)
             await ctx.channel.edit(name=new_name)
