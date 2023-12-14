@@ -18,7 +18,7 @@ class ClaimThread(commands.Cog):
         if thread is None:
             await self.db.insert_one({'thread_id': str(ctx.thread.channel.id), 'claimers': [str(ctx.author.id)]})
             await ctx.send('Claimed')
-            new_name = f"{ctx.author.name}-{thread.recipient}"
+            new_name = f"{ctx.author.name}-{ctx.channel.name}"
             await ctx.channel.edit(name=new_name)
         else:
             await ctx.send('Thread is already claimed')
