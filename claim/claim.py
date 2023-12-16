@@ -18,7 +18,7 @@ class ClaimThread(commands.Cog):
             await ctx.send('Claimed')
             number = random.randint(111,999)
             new_name = f"{number}-{ctx.author.name}-{ctx.channel.name}"
-            B = discord.utils.get(ctx.guild.channels, name="Claimed Tickets")
+            B = discord.utils.get(ctx.guild.channels, name="📪 // Claimed Tickets")
             await ctx.channel.edit(category=B)
             await ctx.channel.edit(name=new_name)
 
